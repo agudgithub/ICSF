@@ -1,0 +1,159 @@
+Trabajo Práctico Nro.7: “Plan de desarrollo y mantenimiento”
+Objetivos:
+● Comprender el uso de un plan de desarrollo y mantenimiento.
+● Utilizar herramientas de automatización en el ciclo de vida de desarrollo.
+Conocimiento Previo:
+● Elaboración de test unitarios.
+● Elaboración de test automatizados.
+● Utilización de gestor de configuración (Git)
+Recursos para realizar el TP:
+● Una notebook por equipo como mínimo.
+Tareas a realizar:
+1. Leer el material teórico propuesto en aula virtual y dictado en teoría.
+2. Elaborar un plan de desarrollo y mantenimiento para el escenario donde se busca
+realizar un mantenimiento correctivo en producción para incidencias que deben ser
+resueltas a la brevedad (Hotfix), para lo cual el plan debe indicar como debe ser
+gestionado el cambio, y como dicho cambio llegará al ambiente productivo de forma
+tal que se garanticen los estándares de calidad de un ciclo normal de desarrollo.
+Debe poder responder a preguntas como:
+a. ¿Cómo se gestiona el cambio?
+b. ¿Hay proceso de revisión? Cual?
+c. ¿Cómo se gestiona el aseguramiento de la calidad en dicho mantenimiento?
+Pruebas manuales y/o Automatizadas?
+d. ¿Por cuales ambientes debe pasar el cambio previo a llegar a producción?
+e. El despliegue a producción ¿es automatizado o manual? ¿Requiere
+aprobación? ¿De quien?
+3. Elaborar un pipeline haciendo uso de Github action que permita:
+a. Garantizar que las pruebas unitarias fueron exitosas.
+b. Garantizar que las pruebas de integración (si las hubiesen) fueron exitosas.
+c. Garantizar que el código cumple con las buenas prácticas del lenguaje
+seleccionado (conocido como linter).
+d. Garantizar que el código está correctamente formateado.
+e. Garantizar que el código genera el build correctamente (si fuese necesario).
+f. Opcional pero deseado: El pipeline debe ejecutarse de forma automática
+sólo cuando se crea un Pull Request hacia la rama develop y el PR debe
+quedar bloqueado hasta que el pipeline finalice su ejecución y haya sido
+exitosa.
+g. Opcional: si todo lo anterior fue exitoso, y está haciendose un merge a la
+rama develop entonces desplegar los cambios al ambiente de desarrollo.
+Para esto pueden simular un sitio web escrito en Angular o React, y que se publique en Firebase Hosting
+(https://firebase.google.com/docs/hosting)
+4. Presentar en clase a modo de examen parcial acompañado de un informe que
+contenga:
+a. Plan de desarrollo y mantenimiento elaborado, debe ser explicado y
+defendido durante el examen.
+b. Pipeline configurado y funcionando. Explicar lo elaborado.
+c. Lecciones aprendidas
+
+
+Pasos a seguir:
+
+Paso 1: Verificar los Scripts en package.json
+Antes de escribir el pipeline, asegúrate de que tu archivo package.json tenga los scripts necesarios. 
+Busca en la sección "scripts" algo similar a esto. Si los nombres son diferentes, ajústalos en los pasos siguientes.
+
+---Cambio nuevo:
+
+"scripts": {
+  "test": "jest",
+  "lint": "eslint .",
+  "cy:run": "cypress run",
+  "build": "echo 'No build step required for this project'"
+},
+
+---Antiguo:
+
+"scripts": {
+  "test": "jest"
+},
+
+
+Paso 2: Crear el Flujo de Trabajo Básico
+Edita el archivo .github/workflows/ci.yml. Empezaremos con una configuración que se ejecuta en cada push para que puedas probarlo fácilmente.
+
+Este código define un "trabajo" llamado build-and-test que se ejecuta en un servidor de Ubuntu. Realiza los pasos iniciales: obtener el código, configurar Node.js e instalar las dependencias.
+
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ] # Por ahora, para probar
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: 1. Checkout code
+            uses: actions/checkout@v3
+
+        - name: 2. Setup Node.js
+            uses: actions/setup-node@v3
+            with:
+                node-version: '20' # Usa una versión LTS de Node.js
+                cache: 'npm'
+
+        - name: 3. Install dependencies
+          run: npm ci # 'ci' es más rápido y seguro para pipelines que 'install'
+
+        - name: 4. Run Linter (Task 3.c)
+          run: npm run lint
+
+        - name: 5. Run Unit Tests (Task 3.a)
+          run: npm test
+
+        - name: 6. Run Integration Tests with Cypress (Task 3.b)
+        uses: cypress-io/github-action@v6
+        with:
+          # Si tu proyecto necesita ser construido (build) antes de probar, descomenta la siguiente línea
+          build: npm run build
+          # El comando para iniciar tu servidor. Si no tienes, Cypress lo intentará por ti.
+          start: npm start
+          wait-on: 'http://localhost:3000' # Espera a que el servidor esté listo en el puerto 3000
+
+Paso 3: Añadir Pasos de Calidad de Código (Linter y Tests)
+Ahora, añade los pasos para ejecutar el linter y las pruebas unitarias. Estos se agregan a la sección steps del archivo ci.yml.
+
+// ...existing code...
+      - name: 3. Install dependencies
+        run: npm ci
+
+      - name: 4. Run Linter (Task 3.c)
+        run: npm run lint
+
+      - name: 5. Run Unit Tests (Task 3.a)
+        run: npm test
+// ...existing code...
+
+Paso 4: Integrar las Pruebas de Cypress
+Las pruebas de integración con Cypress son más complejas porque necesitan que tu aplicación se esté ejecutando. Usaremos la action oficial de Cypress que simplifica todo el proceso.
+
+Este paso se encarga de instalar Cypress, iniciar tu aplicación, ejecutar las pruebas y detener el servidor.
+// ...existing code...
+      - name: 5. Run Unit Tests (Task 3.a)
+        run: npm test
+
+      - name: 6. Run Integration Tests with Cypress (Task 3.b)
+        uses: cypress-io/github-action@v6
+        with:
+          # Si tu proyecto necesita ser construido (build) antes de probar, descomenta la siguiente línea
+          # build: npm run build
+          # El comando para iniciar tu servidor. Si no tienes, Cypress lo intentará por ti.
+          start: npm start
+          wait-on: 'http://localhost:3000' # Espera a que el servidor esté listo en el puerto 3000
+
+
+Paso 5: Configurar el Disparador para Pull Requests (Tarea 3.f)
+Finalmente, modifica la sección on para que el pipeline se ejecute solo cuando se crea o actualiza un Pull Request hacia la rama develop.
+
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+// ...existing code...
+Con este cambio, el pipeline se activará automáticamente en los Pull Requests a develop. GitHub, por defecto, te mostrará el estado del pipeline en el PR y te permitirá bloquear la fusión si las pruebas fallan, cumpliendo así el requisito 3.f. Para activar el bloqueo, ve a la configuración de tu repositorio en GitHub > Branches > Add branch protection rule para la rama develop y marca la opción "Require status checks to pass before merging", seleccionando tu job build-and-test.
+
+Al seguir estos pasos, tendrás un pipeline funcional que valida la calidad de tu código automáticamente.

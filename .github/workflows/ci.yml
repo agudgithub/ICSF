@@ -1,19 +1,57 @@
 # .github/workflows/ci.yml
-name: Node.js CI
+#name: Node.js CI
+
+#on:
+  #pull_request:
+  #push:
+    #branches: [ main ]
+
+#jobs:
+  #build:
+    #runs-on: ubuntu-latest
+    #steps:
+      #- uses: actions/checkout@v3
+      #- name: Use Node.js
+        #uses: actions/setup-node@v3
+        #with:
+          #node-version: '20'
+      #- run: npm install
+      #- run: npm test
+
+name: CI Pipeline
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches: [ main, develop ] # Por ahora, para probar
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - run: npm install
-      - run: npm test
+        - name: 1. Checkout code
+          uses: actions/checkout@v3
+
+        - name: 2. Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+                node-version: '20' # Usa una versión LTS de Node.js
+                cache: 'npm'
+
+        - name: 3. Install dependencies
+          run: npm ci # 'ci' es más rápido y seguro para pipelines que 'install'
+
+        - name: 4. Run Linter (Task 3.c)
+          run: npm run lint
+
+        - name: 5. Run Unit Tests (Task 3.a)
+          run: npm test
+
+        - name: 6. Run Integration Tests with Cypress (Task 3.b)
+          uses: cypress-io/github-action@v6
+          with:
+          # Si tu proyecto necesita ser construido (build) antes de probar, descomenta la siguiente línea
+            build: npm run build
+          # El comando para iniciar tu servidor. Si no tienes, Cypress lo intentará por ti.
+            start: npm start
+            wait-on: 'http://localhost:3000' # Espera a que el servidor esté listo en el puerto 3000
