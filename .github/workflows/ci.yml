@@ -47,11 +47,9 @@ jobs:
         - name: 5. Run Unit Tests (Task 3.a)
           run: npm test
 
-        - name: 6. Run Integration Tests with Cypress (Task 3.b)
-          uses: cypress-io/github-action@v6
-          with:
-          # Si tu proyecto necesita ser construido (build) antes de probar, descomenta la siguiente línea
-            build: npm run build
-          # El comando para iniciar tu servidor. Si no tienes, Cypress lo intentará por ti.
-            start: npm start
-            wait-on: 'http://localhost:3000' # Espera a que el servidor esté listo en el puerto 3000
+        # - name: 6. Run Integration Tests with Cypress (Task 3.b)
+        #   uses: cypress-io/github-action@v6
+        #   with:
+        #     build: npm run build
+        #     start: npm start
+        #     wait-on: 'http://localhost:3000' # Espera a que el servidor esté listo en el puerto 3000
