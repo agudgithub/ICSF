@@ -14,7 +14,7 @@ function agregarContacto(contacto) {
     contacto.email &&
     contacto.phone
   ) {
-    contactos.push(contacto);
+    contactos.push(contacto)
     return { success: true, contacto };
   }
   return { success: false };
