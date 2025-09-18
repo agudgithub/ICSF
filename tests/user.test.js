@@ -158,3 +158,16 @@ test("Listar contactos retorna un array", () => {
   const lista = listarContactos();
   expect(Array.isArray(lista)).toBe(true);
 });
+
+//Nuevo Commit para probar CI/CD
+test("Agregar contacto con email vacío", () => {
+  const contacto = {
+    firstName: "Juan",
+    lastName: "Pérez",
+    birthdate: "1990-01-01",
+    email: "",
+    phone: "555555555"
+  };
+  const result = agregarContacto(contacto);
+  expect(result.success).toBe(false);
+});
