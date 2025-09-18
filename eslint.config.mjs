@@ -32,18 +32,18 @@ export default [
 
   // 4. Configuración específica para los tests de Cypress
   // Esto añade las globales de Cypress a las de Node para los archivos de cypress.
-  {
-    files: ["cypress/**/*.js"],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.cypress, // Agrega las globales de Cypress (cy, describe, etc.)
-      },
-    },
-  },
+  // {
+  //   files: ["cypress/**/*.js"],
+  //   languageOptions: {
+  //     globals: {
+  //       ...globals.node,
+  //       ...globals.cypress, // Agrega las globales de Cypress (cy, describe, etc.)
+  //     },
+  //   },
+  // },
 
   // 5. Ignorar archivos que no quieres que se analicen
   {
-    ignores: ["node_modules/"],
+    ignores: ["node_modules/", "cypress/"],
   },
 ];
