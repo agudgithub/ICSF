@@ -53,4 +53,8 @@ jobs:
       - name: 6. Run Integration Tests with Cypress (Task 3.b)
         run: npx cypress run
 
+        env:
+          CYPRESS_USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
+          CYPRESS_USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
+
         ##Prueba
