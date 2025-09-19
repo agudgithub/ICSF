@@ -8,12 +8,12 @@ module.exports = defineConfig({
     // Pasa las variables a Cypress directamente
     env: {
       // REEMPLAZA ESTO:
-      // CYPRESS_USER_EMAIL: process.env.CYPRESS_USER_EMAIL,
-      // CYPRESS_USER_PASSWORD: process.env.CYPRESS_USER_PASSWORD,
+       CYPRESS_USER_EMAIL: process.env.CYPRESS_USER_EMAIL,
+       CYPRESS_USER_PASSWORD: process.env.CYPRESS_USER_PASSWORD,
 
       // CON ESTO:
-      CYPRESS_USER_EMAIL: 'agarva@gmail.com',
-      CYPRESS_USER_PASSWORD: '1234567',
+      //CYPRESS_USER_EMAIL: 'agarva@gmail.com',
+      //CYPRESS_USER_PASSWORD: '1234567',
     },
   },
 });
