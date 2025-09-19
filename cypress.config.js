@@ -1,5 +1,5 @@
 const { defineConfig } = require('cypress');
-require("dotenv").config(); // Lee el archivo .env
+require('dotenv').config(); // Lee el archivo .env
 
 module.exports = defineConfig({
   e2e: {
@@ -8,7 +8,7 @@ module.exports = defineConfig({
     // Pasa las variables a Cypress
     env: {
       CYPRESS_USER_EMAIL: process.env.CYPRESS_USER_EMAIL,
-      CYPRESS_USER_PASSWORD: process.env.CYPRESS_USER_PASSWORD
-    }
-  }
+      CYPRESS_USER_PASSWORD: process.env.CYPRESS_USER_PASSWORD,
+    },
+  },
 });
