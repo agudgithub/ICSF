@@ -1,6 +1,6 @@
-import js from "@eslint/js";
-import globals from "globals";
-import prettierConfig from "eslint-config-prettier";
+import js from '@eslint/js';
+import globals from 'globals';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
   // 1. Aplicar las recomendaciones de ESLint como base para todos los archivos
@@ -9,10 +9,10 @@ export default [
   // 2. Configuración principal para archivos Node.js
   // Esto sobreescribe las globales del navegador (de 'recommended') con las de Node.
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "commonjs",
+      ecmaVersion: 'latest',
+      sourceType: 'commonjs',
       globals: {
         ...globals.node, // Agrega todas las globales de Node.js
       },
@@ -22,7 +22,7 @@ export default [
   // 3. Configuración específica para los tests de Jest
   // Esto añade las globales de Jest a las de Node para los archivos de test.
   {
-    files: ["tests/**/*.js"],
+    files: ['tests/**/*.js'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -45,7 +45,7 @@ export default [
 
   // 5. Ignorar archivos que no quieres que se analicen
   {
-    ignores: ["node_modules/", "cypress/"],
+    ignores: ['node_modules/', 'cypress/'],
   },
 
   prettierConfig,
