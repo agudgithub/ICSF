@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import globals from "globals";
+import prettierConfig from "eslint-config-prettier";
 
 export default [
   // 1. Aplicar las recomendaciones de ESLint como base para todos los archivos
@@ -46,4 +47,6 @@ export default [
   {
     ignores: ["node_modules/", "cypress/"],
   },
+
+  prettierConfig,
 ];
