@@ -44,11 +44,11 @@ jobs:
         - name: 4. Lint code 
           run: npm run lint
 
-        - name: 5. Check Formatting (Task 3.d)
-          run: npm run format:check
-        
-        - name: 6. Run Unit Tests (Task 3.a)
+        - name: 5. Run Unit Tests (Task 3.a)
           run: npm test
 
-        - name: 7. Run Integration Tests with Cypress (Task 3.b)
+        - name: 6. Run Integration Tests with Cypress (Task 3.b)
           run: npx cypress run
+
+        - name: 7. Check Formatting (Task 3.d)
+          run: npm run format:check
