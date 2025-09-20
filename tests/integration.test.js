@@ -1,4 +1,8 @@
-const { agregarContacto, listarContactos, eliminarContacto } = require('../src/user');
+const {
+  agregarContacto,
+  listarContactos,
+  eliminarContacto,
+} = require('../src/user');
 
 test('Agregar, listar y eliminar contacto (prueba de integración)', () => {
   const contacto = {
@@ -15,7 +19,7 @@ test('Agregar, listar y eliminar contacto (prueba de integración)', () => {
 
   // Listar contactos y verificar que está
   const lista = listarContactos();
-  expect(lista.find(c => c.email === contacto.email)).toBeDefined();
+  expect(lista.find((c) => c.email === contacto.email)).toBeDefined();
 
   // Eliminar contacto
   const deleteResult = eliminarContacto(contacto.email);
@@ -23,5 +27,5 @@ test('Agregar, listar y eliminar contacto (prueba de integración)', () => {
 
   // Verificar que ya no está en la lista
   const listaFinal = listarContactos();
-  expect(listaFinal.find(c => c.email === contacto.email)).toBeUndefined();
+  expect(listaFinal.find((c) => c.email === contacto.email)).toBeUndefined();
 });
