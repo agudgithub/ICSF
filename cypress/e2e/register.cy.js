@@ -1,6 +1,5 @@
 describe('Agregar contacto con usuario existente', () => {
   it('Debería agregar un contacto usando variables de entorno', () => {
-    // CORRECCIÓN: Añadir el prefijo 'CYPRESS_'
     const email = Cypress.env('CYPRESS_USER_EMAIL');
     const password = Cypress.env('CYPRESS_USER_PASSWORD');
     cy.request('POST', '/users/login', { email, password }).then(
