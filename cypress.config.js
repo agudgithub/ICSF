@@ -12,3 +12,5 @@ module.exports = defineConfig({
     },
   },
 });
+
+//Commit de prueba para Pull Request
