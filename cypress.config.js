@@ -1,5 +1,5 @@
 const { defineConfig } = require('cypress');
-require('dotenv').config(); // Para probar con el .env local
+require('dotenv').config();
 
 module.exports = defineConfig({
   e2e: {
@@ -12,3 +12,5 @@ module.exports = defineConfig({
     },
   },
 });
+
+//Commit de prueba para Pull Request
