@@ -1,4 +1,3 @@
-// src/user.js
 // Simulación de almacenamiento en memoria para contactos
 const contactos = [];
 

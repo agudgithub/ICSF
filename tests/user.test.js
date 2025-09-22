@@ -1,4 +1,4 @@
-// tests/user.test.js
+// Tests Unitarios
 const {
   agregarContacto,
   listarContactos,
@@ -163,7 +163,6 @@ test('Listar contactos retorna un array', () => {
   expect(Array.isArray(lista)).toBe(true);
 });
 
-//Nuevo Commit para probar CI/CD
 test('Agregar contacto con email vacío', () => {
   const contacto = {
     firstName: 'Juan',
